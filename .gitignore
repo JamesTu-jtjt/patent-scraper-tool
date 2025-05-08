@@ -25,10 +25,6 @@ Thumbs.db
 chromedriver
 chromedriver.exe
 
-# PDFs downloaded by the scraper
-pdfs/
-*.pdf
-
 # VSCode or other IDE configs
 .vscode/
 .idea/
