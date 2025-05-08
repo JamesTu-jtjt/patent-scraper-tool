@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE tw-patent-grant SYSTEM "patent.dtd">
+<tw-patent-grant dtd-version="A103.1.0">
+  <tw-bibliographic-data-grant>
+    <volno>41</volno>
+    <isuno>16</isuno>
+    <kindcode>B</kindcode>
+    <publication-reference>
+      <document-id>
+        <doc-number>I439544</doc-number>
+        <kind />
+        <date>103/06/01</date>
+      </document-id>
+    </publication-reference>
+    <certificate-number>
+      <document-id>
+        <doc-number>I439544</doc-number>
+        <kind />
+        <date />
+      </document-id>
+    </certificate-number>
+    <application-reference appl-type="invention">
+      <document-id>
+        <doc-number>101122836</doc-number>
+        <kind />
+        <date>101/06/26</date>
+      </document-id>
+    </application-reference>
+    <classification-ipc>
+      <main-classification edition="200601120140318V">C12N1/20</main-classification>
+    </classification-ipc>
+    <parties>
+      <applicants>
+        <applicant sequence="1" app-type="applicant">
+          <addressbook>
+            <chinese-name name-type="">
+              <last-name>國立高雄海洋科技大學</last-name>
+              <first-name></first-name>
+            </chinese-name>
+            <english-name name-type="">
+              <last-name>NATIONAL KAOHSIUNG MARINE UNIVERSITY</last-name>
+              <middle-name />
+              <first-name />
+            </english-name>
+            <address>高雄市</address>
+            <english-country>TW</english-country>
+            <english-address>TW</english-address>
+          </addressbook>
+        </applicant>
+      </applicants>
+      <inventors>
+        <inventor sequence="1" app-type="applicant">
+          <addressbook>
+            <chinese-name name-type="">
+              <last-name>許德賢</last-name>
+              <first-name></first-name>
+            </chinese-name>
+            <english-name name-type="">
+              <last-name>SHEU, DERSHYAN</last-name>
+              <middle-name></middle-name>
+              <first-name></first-name>
+            </english-name>
+            <address></address>
+            <english-country>TW</english-country>
+            <english-address>TW</english-address>
+          </addressbook>
+        </inventor>
+        <inventor sequence="2" app-type="applicant">
+          <addressbook>
+            <chinese-name name-type="">
+              <last-name>林啟燦</last-name>
+              <first-name></first-name>
+            </chinese-name>
+            <english-name name-type="">
+              <last-name>LIN, CHITSAN</last-name>
+              <middle-name></middle-name>
+              <first-name></first-name>
+            </english-name>
+            <address></address>
+            <english-country>TW</english-country>
+            <english-address>TW</english-address>
+          </addressbook>
+        </inventor>
+        <inventor sequence="3" app-type="applicant">
+          <addressbook>
+            <chinese-name name-type="">
+              <last-name>賴勇維</last-name>
+              <first-name></first-name>
+            </chinese-name>
+            <english-name name-type="">
+              <last-name>LAI, YUNGWEI</last-name>
+              <middle-name></middle-name>
+              <first-name></first-name>
+            </english-name>
+            <address></address>
+            <english-country>TW</english-country>
+            <english-address>TW</english-address>
+          </addressbook>
+        </inventor>
+      </inventors>
+      <agents>
+        <agent sequence="1" rep-type="agent">
+          <addressbook>
+            <chinese-name name-type="">
+              <last-name>蔡坤財</last-name>
+              <first-name></first-name>
+            </chinese-name>
+            <address>臺北市</address>
+          </addressbook>
+        </agent>
+        <agent sequence="2" rep-type="agent">
+          <addressbook>
+            <chinese-name name-type="">
+              <last-name>李世章</last-name>
+              <first-name></first-name>
+            </chinese-name>
+            <address>臺北市</address>
+          </addressbook>
+        </agent>
+      </agents>
+    </parties>
+    <examiners>
+      <examiner>
+        <chinese-name>
+          <last-name>施雅儀</last-name>
+          <first-name />
+        </chinese-name>
+      </examiner>
+    </examiners>
+    <priority-claims></priority-claims>
+    <tw-bio-deposit>
+      <bio-accno>BCRC 910551</bio-accno>
+      <date>20120522</date>
+      <depositary>
+        <country>TW</country>
+        <text>食品工業發展研究所生物資源保存及研究中心</text>
+      </depositary>
+    </tw-bio-deposit>
+    <invention-title>
+      <chinese-title>赤球菌分離株及其用於降解油類</chinese-title>
+      <english-title>RHODOCOCCUS ISOLATE AND APPLICATION OF DEGRADING OILS</english-title>
+    </invention-title>
+    <refs>
+      <ref>
+        <country>US</country>
+        <doc-number>2008/0020947</doc-number>
+        <kind>A1</kind>
+      </ref>
+    </refs>
+    <orefs>
+      <oref>Bell KS et al., "The genus Rhodococcus", Journal of Applied Microbiology, vol.85, p.195-210, 1998                                                                                                                                                                                                                                                                                                               
+</oref>
+      <oref>Iwabuchi N et al., "Extracellular Polysaccharides of Rhodococcus rhodochrous S-2 Stimulate the Degradation of Aromatic Components in Crude Oil by Indigenous Marine Bacteria", Applied and Environmental Microbiology, vol.68, no.5, p.2337-2343, 2002/05                                                                                                                                                       
+</oref>
+      <oref>Peng F et al., "An oil-degrading bacterium: Rhodococcus erythropolis strain 3C-9 and its biosurfactants", Journal of Applied Microbiology, vol.102, p.1603-1611, 2007                                                                                                                                                                                                                                           
+</oref>
+      <oref>Auffret M et al., "Degradation of a Mixture of Hydrocarbons, Gasoline, and Diesel Oil Additives by Rhodococcus aetherivorans and Rhodococcus wratislaviensis", Applied and Environmental Microbiology, vol.75, no.24, p7774-7782, 2009/12                                                                                                                                                                       
+</oref>
+    </orefs>
+    <application-publication-reference>
+      <document-id>
+        <doc-number>201400610</doc-number>
+        <kind />
+        <date>103/01/01</date>
+      </document-id>
+    </application-publication-reference>
+  </tw-bibliographic-data-grant>
+  <drawings num="第6圖">
+    <figure>
+      <img align="absmiddle" height="503px" width="574px" file="d10001.TIF" alt="圖式ed10001.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10001.png"></img>
+    </figure>
+    <figure>
+      <img align="absmiddle" height="487px" width="568px" file="d10002.TIF" alt="圖式ed10002.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10002.png"></img>
+    </figure>
+    <figure>
+      <img align="absmiddle" height="803px" width="627px" file="d10003.TIF" alt="圖式ed10003.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10003.png"></img>
+    </figure>
+    <figure>
+      <img align="absmiddle" height="593px" width="984px" file="d10004.TIF" alt="圖式ed10004.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10004.png"></img>
+    </figure>
+    <figure>
+      <img align="absmiddle" height="569px" width="979px" file="d10005.TIF" alt="圖式ed10005.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10005.png"></img>
+    </figure>
+    <figure>
+      <img align="absmiddle" height="635px" width="760px" file="d10006.TIF" alt="*圖式ed10006.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10006.png"></img>
+    </figure>
+    <drawing-description>
+      <p type="p">為讓本發明之上述和其他目的、特徵、優點與實施例能更明顯易懂，所附圖式之說明如下：第1圖係繪示依照本發明之一實施例之赤球菌分離株的生長溫度分析圖。</p>
+      <p type="p">第2圖係繪示依照本發明之一實施例之赤球菌分離株的生長pH值分析圖。</p>
+      <p type="p">第3圖係繪示依照本發明之一實施例之赤球菌分離株與鄰近菌株之親緣關係樹狀圖。</p>
+      <p type="p">第4圖係繪示依照本發明之一實施例之赤球菌分離株的分解柴油能力測試分析圖。</p>
+      <p type="p">第5圖係繪示未添加赤球菌分離株的分解柴油能力測試分析圖。</p>
+      <p type="p">第6圖係繪示依照本發明之一實施例之赤球菌分離株的分解柴油效率測試分析圖。</p>
+    </drawing-description>
+  </drawings>
+  <claims>
+    <claim id="clm1" num="1">
+      <p type="claim-text">一種赤球菌分離株，其中該赤球菌(<i>Rhodococcus</i>
+sp.)分離株SF-1寄存於臺灣新竹食品工業研究與發展研究所，寄存編號為BCRC 910551。</p>
+    </claim>
+    <claim id="clm2" num="2">
+      <p type="claim-text">一種用於降解油類之組成物，其中該用於降解油類之組成物包括一赤球菌分離株SF-1(寄存編號為BCRC 910551)，且該赤球菌分離株SF-1之含量可有效降解油類。</p>
+    </claim>
+    <claim id="clm3" num="3">
+      <p type="claim-text">根據申請專利範圍第2項所述之用於降解油類之組成物，其中該油類係選自於由燃料用油、食用油以及上述之任意組合所組成之一族群。</p>
+    </claim>
+    <claim id="clm4" num="4">
+      <p type="claim-text">根據申請專利範圍第2項所述之用於降解油類之組成物，其中該油類係選自於由柴油、沙拉油以及上述之任意組合所組成之一族群。</p>
+    </claim>
+  </claims>
+</tw-patent-grant>

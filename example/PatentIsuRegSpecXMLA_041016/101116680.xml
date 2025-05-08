@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE tw-patent-grant SYSTEM "patent.dtd">
+<tw-patent-grant dtd-version="A103.1.0">
+  <tw-bibliographic-data-grant>
+    <volno>41</volno>
+    <isuno>16</isuno>
+    <kindcode>B</kindcode>
+    <publication-reference>
+      <document-id>
+        <doc-number>I439543</doc-number>
+        <kind />
+        <date>103/06/01</date>
+      </document-id>
+    </publication-reference>
+    <certificate-number>
+      <document-id>
+        <doc-number>I439543</doc-number>
+        <kind />
+        <date />
+      </document-id>
+    </certificate-number>
+    <application-reference appl-type="invention">
+      <document-id>
+        <doc-number>101116680</doc-number>
+        <kind />
+        <date>101/05/10</date>
+      </document-id>
+    </application-reference>
+    <classification-ipc>
+      <main-classification edition="200601120140421V">C12N1/14</main-classification>
+      <further-classification edition="200601120140421V">A01G1/04</further-classification>
+    </classification-ipc>
+    <parties>
+      <applicants>
+        <applicant sequence="1" app-type="applicant">
+          <addressbook>
+            <chinese-name name-type="">
+              <last-name>慧普生技股份有限公司</last-name>
+              <first-name></first-name>
+            </chinese-name>
+            <english-name name-type="">
+              <last-name>WE-PRO BIOTECH CO., LTD.</last-name>
+              <middle-name />
+              <first-name />
+            </english-name>
+            <address>高雄市</address>
+            <english-country>TW</english-country>
+            <english-address>TW</english-address>
+          </addressbook>
+        </applicant>
+      </applicants>
+      <inventors>
+        <inventor sequence="1" app-type="applicant">
+          <addressbook>
+            <chinese-name name-type="">
+              <last-name>顏宏愷</last-name>
+              <first-name></first-name>
+            </chinese-name>
+            <english-name name-type="">
+              <last-name>YEN, HUNG KAI</last-name>
+              <middle-name></middle-name>
+              <first-name></first-name>
+            </english-name>
+            <address></address>
+            <english-country>TW</english-country>
+            <english-address>TW</english-address>
+          </addressbook>
+        </inventor>
+        <inventor sequence="2" app-type="applicant">
+          <addressbook>
+            <chinese-name name-type="">
+              <last-name>戴瑞凡</last-name>
+              <first-name></first-name>
+            </chinese-name>
+            <english-name name-type="">
+              <last-name>TAI, JUI FAN</last-name>
+              <middle-name></middle-name>
+              <first-name></first-name>
+            </english-name>
+            <address></address>
+            <english-country>TW</english-country>
+            <english-address>TW</english-address>
+          </addressbook>
+        </inventor>
+        <inventor sequence="3" app-type="applicant">
+          <addressbook>
+            <chinese-name name-type="">
+              <last-name>賈銅安</last-name>
+              <first-name></first-name>
+            </chinese-name>
+            <english-name name-type="">
+              <last-name>CHIA, TUNG AN</last-name>
+              <middle-name></middle-name>
+              <first-name></first-name>
+            </english-name>
+            <address></address>
+            <english-country>TW</english-country>
+            <english-address>TW</english-address>
+          </addressbook>
+        </inventor>
+        <inventor sequence="4" app-type="applicant">
+          <addressbook>
+            <chinese-name name-type="">
+              <last-name>賈鐵安</last-name>
+              <first-name></first-name>
+            </chinese-name>
+            <english-name name-type="">
+              <last-name>CHIA, TIEH AN</last-name>
+              <middle-name></middle-name>
+              <first-name></first-name>
+            </english-name>
+            <address></address>
+            <english-country>TW</english-country>
+            <english-address>TW</english-address>
+          </addressbook>
+        </inventor>
+      </inventors>
+      <agents>
+        <agent sequence="1" rep-type="agent">
+          <addressbook>
+            <chinese-name name-type="">
+              <last-name>陳啟舜</last-name>
+              <first-name></first-name>
+            </chinese-name>
+            <address>高雄市</address>
+          </addressbook>
+        </agent>
+      </agents>
+    </parties>
+    <examiners>
+      <examiner>
+        <chinese-name>
+          <last-name>施雅儀</last-name>
+          <first-name />
+        </chinese-name>
+      </examiner>
+    </examiners>
+    <priority-claims></priority-claims>
+    <tw-bio-deposit></tw-bio-deposit>
+    <invention-title>
+      <chinese-title>牛樟芝的培養方法</chinese-title>
+      <english-title>CULTIVATION METHOD OF TAIWANOFUNGUS CAMPHORATES</english-title>
+    </invention-title>
+    <refs>
+      <ref>
+        <country>CN</country>
+        <doc-number>101151957</doc-number>
+        <kind>A</kind>
+      </ref>
+      <ref>
+        <country>CN</country>
+        <doc-number>101822170</doc-number>
+        <kind>A</kind>
+      </ref>
+    </refs>
+    <orefs>
+      <oref>林葦郁, "利用固定化菌體進行樟芝(Antrodia camphorata)的深層培養生產菌體代謝物之研究", 東海大學食品科學系研究所論文, 2005年                                                                                                                                                                                                                                                                                                                                   
+</oref>
+    </orefs>
+    <application-publication-reference>
+      <document-id>
+        <doc-number>201346027</doc-number>
+        <kind />
+        <date>102/11/16</date>
+      </document-id>
+    </application-publication-reference>
+  </tw-bibliographic-data-grant>
+  <drawings num="第1圖 ">
+    <figure>
+      <img align="absmiddle" height="538px" width="426px" file="d10001.TIF" alt="*圖式ed10001.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10001.png"></img>
+    </figure>
+    <figure>
+      <img align="absmiddle" height="423px" width="299px" file="d10002.TIF" alt="圖式ed10002.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10002.png"></img>
+    </figure>
+    <figure>
+      <img align="absmiddle" height="451px" width="279px" file="d10003.TIF" alt="圖式ed10003.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10003.png"></img>
+    </figure>
+    <figure>
+      <img align="absmiddle" height="432px" width="251px" file="d10004.TIF" alt="圖式ed10004.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10004.png"></img>
+    </figure>
+    <figure>
+      <img align="absmiddle" height="425px" width="273px" file="d10005.TIF" alt="圖式ed10005.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10005.png"></img>
+    </figure>
+    <figure>
+      <img align="absmiddle" height="464px" width="321px" file="d10006.TIF" alt="圖式ed10006.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10006.png"></img>
+    </figure>
+    <figure>
+      <img align="absmiddle" height="603px" width="427px" file="d10007.TIF" alt="圖式ed10007.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10007.png"></img>
+    </figure>
+    <figure>
+      <img align="absmiddle" height="550px" width="906px" file="d10008.TIF" alt="圖式ed10008.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10008.png"></img>
+    </figure>
+    <figure>
+      <img align="absmiddle" height="521px" width="905px" file="d10009.TIF" alt="圖式ed10009.png" img-content="tif" img-format="tif" orientation="portrait" inline="yes" giffile="ed10009.png"></img>
+    </figure>
+    <drawing-description>
+      <p type="p">第1圖：本發明牛樟芝的培養方法之步驟方塊圖(一)。</p>
+      <p type="p">第2a圖：本實施例之柱體培養基的立體外觀圖-四面柱體。</p>
+      <p type="p">第2b圖：本實施例之柱體培養基的立體外觀圖-六面柱體。</p>
+      <p type="p">第2c圖：本實施例之柱體培養基的立體外觀圖-八面柱體。</p>
+      <p type="p">第2d圖：本實施例之柱體培養基的立體外觀圖-十二面柱體。</p>
+      <p type="p">第2e圖：本實施例之柱體培養基的立體外觀圖-圓柱體。</p>
+      <p type="p">第3圖：本發明牛樟芝的培養方法之步驟方塊圖(二)。</p>
+      <p type="p">第4圖：本實施例之UPLC-MS/MS層析圖([m/z]<sup>+</sup>
+)。</p>
+      <p type="p">第5圖：本實施例之UPLC-MS/MS層析圖([m/z]<sup>-</sup>
+)。</p>
+    </drawing-description>
+  </drawings>
+  <claims>
+    <claim id="clm1" num="1">
+      <p type="claim-text">一種牛樟芝的培養方法，其包含：一培養基配製步驟，係將重量百分比為0.1~50%之葡萄糖、1~5%之蛋白腖、0.1~50%之大麥萃取物、0.1~50%之酵母萃取物及0.5~10%之固化劑，以水配製成一混合溶液，將該混合溶液煮沸，使上述成分完全溶解後，使該混合溶液凝固成一柱體培養基，該柱體培養基之深度為2~20公分；一接種步驟，係於該柱體培養基之內部設有數個預定接種位，該數個預定接種位距離該柱體培養基之外表面0.5~10公分深處，將牛樟芝接種於各預定接種位上；及一培養步驟，係將接種完成之柱體培養基於溫度23~28℃之環境下培養至少三個月，獲得一牛樟菌體。</p>
+    </claim>
+    <claim id="clm2" num="2">
+      <p type="claim-text">如申請專利範圍第1項所述之牛樟芝的培養方法，其中，該培養步驟後，更包含一乾燥步驟，係將長有牛樟菌體之柱體培養基，於30~40℃下烘乾至含水量低於2%，獲得一牛樟乾燥菌塊。</p>
+    </claim>
+    <claim id="clm3" num="3">
+      <p type="claim-text">如申請專利範圍第1或2項所述之牛樟芝的培養方法，其中，各預定接種位之間相距0.5~2公分。</p>
+    </claim>
+    <claim id="clm4" num="4">
+      <p type="claim-text">如申請專利範圍第3項所述之牛樟芝的培養方法，其中，該柱體培養基為多面柱體或圓柱體。</p>
+    </claim>
+    <claim id="clm5" num="5">
+      <p type="claim-text">如申請專利範圍第1或2項所述之牛樟芝的培養方法，其中，該固化劑為瓊脂。</p>
+    </claim>
+    <claim id="clm6" num="6">
+      <p type="claim-text">如申請專利範圍第1或2項所述之牛樟芝的培養方法，其中，該培養步驟之培養時間為4~12個月。</p>
+    </claim>
+    <claim id="clm7" num="7">
+      <p type="claim-text">如申請專利範圍第2項所述之牛樟芝的培養方法，其中，該乾燥步驟之乾燥時間為24~72小時。</p>
+    </claim>
+  </claims>
+</tw-patent-grant>

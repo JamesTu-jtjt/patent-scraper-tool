@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+	專利公報 DTD 
+	Version:A103.1.0  2014-05-22  公報增修初版(整併發明/新型/設計3DTD)
+ -->
+
+<!ELEMENT tw-patent-grants (tw-patent-grant*)>
+<!ATTLIST tw-patent-grants
+	total-count CDATA #IMPLIED
+>
+
+<!ELEMENT tw-patent-grant (tw-bibliographic-data-grant, drawings* , claims*)>
+<!ELEMENT tw-bibliographic-data-grant (volno, isuno,kindcode*, publication-reference, certificate-number, application-reference, classification-ipc*, classification-locarno*, parties, examiners?, priority-claims*, tw-bio-deposit* , invention-title, refs*, orefs*, application-publication-reference* )>
+
+<!--卷數-->
+<!ELEMENT volno (#PCDATA)>
+<!--期別-->
+<!ELEMENT isuno (#PCDATA)>
+<!--Kind Code-->
+<!ELEMENT kindcode (#PCDATA)>
+
+<!--書目資料結構-->
+<!ELEMENT publication-reference (document-id)>
+<!ELEMENT document-id (country |  doc-number |  kind |  date)*>
+<!--國別-->
+<!ELEMENT country (#PCDATA)>
+<!--號碼-->
+<!ELEMENT doc-number (#PCDATA)>
+<!--類型-->
+<!ELEMENT kind (#PCDATA)>
+<!--日期-->
+<!ELEMENT date (#PCDATA)>
+
+<!--證書號資料-->
+<!ELEMENT certificate-number (document-id)>
+
+<!--申請案號資料-->
+<!ELEMENT application-reference (document-id)>
+
+<!--IPC-->
+<!ELEMENT classification-ipc (main-classification, further-classification*)>
+<!--工業設計分類號-->
+<!ELEMENT classification-locarno (main-classification, further-classification*)>
+<!--主 IPC / 主分類號-->
+<!ELEMENT main-classification (#PCDATA)>
+<!--IPC 分類 / 其他分類號-->
+<!ELEMENT further-classification (#PCDATA)>
+
+<!--相關人員資料-->
+<!ELEMENT parties (applicants , inventors , agents*)>
+
+<!--審查人員(新型無此資訊)-->
+<!ELEMENT examiners (examiner*)>
+<!ELEMENT examiner (chinese-name)>
+
+<!--人員資訊(資料結構)-->
+<!ELEMENT addressbook (chinese-name, english-name?, address, english-country?, english-address?)>
+<!--中文名稱-->
+<!ELEMENT chinese-name (last-name , first-name)>
+<!-- 姓 -->
+<!ELEMENT last-name (#PCDATA | img )*>
+<!-- 名 -->
+<!ELEMENT first-name (#PCDATA | img)*>
+<!--英文名稱-->
+<!ELEMENT english-name (last-name , middle-name , first-name)>
+<!--中間名-->
+<!ELEMENT middle-name (#PCDATA)>
+<!--地址-->
+<!ELEMENT address (#PCDATA | img)*>
+<!--英文國別-->
+<!ELEMENT english-country (#PCDATA)>
+<!--英文地址-->
+<!ELEMENT english-address (#PCDATA)>
+
+<!--申請人-->
+<!ELEMENT applicants (applicant+)>
+<!ELEMENT applicant (addressbook)>
+
+<!-- 發明人 / 設計人 / 新型創作人-->
+<!ELEMENT inventors (inventor+)>
+<!ELEMENT inventor (addressbook)>
+
+<!-- 代理人-->
+<!ELEMENT agents (agent*)>
+<!ELEMENT agent (addressbook)>
+
+<!-- 參考文獻-專利資訊(新型無此資訊)-->
+<!ELEMENT refs (ref*)>
+<!ELEMENT ref (country, doc-number, kind)>
+<!-- 參考文獻-非專利資訊(新型無此資訊)-->
+<!ELEMENT orefs (oref*)>
+<!ELEMENT oref (#PCDATA)>
+
+
+<!-- 優先權-->
+<!ELEMENT priority-claims (priority-claim*)>
+<!ELEMENT priority-claim (country , doc-number , date)>
+
+<!-- 生物材料寄存(設計無此資訊)(新型無此資訊)-->
+<!ELEMENT tw-bio-deposit (bio-accno | date | depositary)*>
+<!-- 生物材料寄存號碼(設計無此資訊)(新型無此資訊)-->
+<!ELEMENT bio-accno (#PCDATA)>
+<!-- 生物材料寄存機構(設計無此資訊)(新型無此資訊)-->
+<!ELEMENT depositary (country*, text*)>
+
+<!-- 發明名稱 / 設計名稱 / 新型名稱-->
+<!ELEMENT invention-title (chinese-title , english-title)>
+<!-- 發明中文名稱 / 設計中文名稱 / 新型中文名稱-->
+<!ELEMENT chinese-title (#PCDATA | img | sub | sup)*>
+<!-- 發明英文名稱 / 設計英文名稱 / 新型英文名稱-->
+<!ELEMENT english-title (#PCDATA | sub | sup)*>
+
+<!--公開案號資料(設計無此資訊)(新型無此資訊)-->
+<!ELEMENT application-publication-reference (document-id*)>
+
+<!--圖式-->
+<!ELEMENT drawings (#PCDATA | i | sup | b | em | u | sub | figure | br | drawing-description  | img | strong | p | blockquote | div )*>
+<!--圖式簡單說明-->
+<!ELEMENT drawing-description (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div)*>
+
+<!--申請權利範圍-->
+<!ELEMENT claims (claim)*>
+<!ELEMENT claim (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div)*>
+
+<!-- 文字內容 -->
+<!ELEMENT text (#PCDATA)>
+
+<!-- 斜體 -->
+<!ELEMENT i (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div | a)*>
+<!-- 段落 -->
+<!ELEMENT p (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div | a)*>
+<!-- 圖檔 -->
+<!ELEMENT figure (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div)*>
+<!-- 圖檔 -->
+<!ELEMENT img (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div)*>
+<!-- 換行 -->
+<!ELEMENT br (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div)*>
+<!-- 強調 -->
+<!ELEMENT em (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div)*>
+<!-- 更強調 -->
+<!ELEMENT strong (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div)*>
+<!-- 底線 -->
+<!ELEMENT u (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div)*>
+<!-- 下標 -->
+<!ELEMENT sub (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div)*>
+<!-- 上標 -->
+<!ELEMENT sup (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div)*>
+<!-- 粗體 -->
+<!ELEMENT b (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div)*>
+<!-- 引述區段 -->
+<!ELEMENT blockquote (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div)*>
+<!-- 區塊 -->
+<!ELEMENT div (#PCDATA | i | sup | b | em | u | sub | figure | br   | img | strong | p | blockquote | div)*>
+<!-- 連結 -->
+<!ELEMENT a (#PCDATA | i | figure | img | br | em | u | sub | sup | b | blockquote)*>
+<!ATTLIST a
+	href CDATA #IMPLIED
+>
+
+<!ATTLIST blockquote
+	type CDATA #IMPLIED
+	align CDATA #IMPLIED
+    id CDATA  #IMPLIED
+    dir CDATA  #IMPLIED
+   style CDATA  #IMPLIED
+   isabst CDATA #IMPLIED
+>
+
+<!ATTLIST div
+	style CDATA #IMPLIED
+	isabst CDATA #IMPLIED
+>
+
+<!ATTLIST agent
+	sequence CDATA  #IMPLIED
+	rep-type CDATA  #IMPLIED
+	id CDATA #IMPLIED
+>
+<!ATTLIST applicant
+	sequence CDATA  #IMPLIED
+	app-type CDATA  #IMPLIED
+	id CDATA  #IMPLIED
+>
+<!ATTLIST examiner
+	sequence CDATA  #IMPLIED
+	app-type CDATA  #IMPLIED
+	id CDATA  #IMPLIED
+>
+<!ATTLIST application-reference
+	appl-type CDATA  #IMPLIED
+	id CDATA  #IMPLIED
+>
+<!ATTLIST claim
+	id CDATA  #IMPLIED
+	num CDATA  #IMPLIED
+>
+<!ATTLIST claims
+	id CDATA  #IMPLIED
+	num CDATA  #IMPLIED
+>
+<!ATTLIST drawing-description
+	id CDATA  #IMPLIED
+>
+<!ATTLIST drawings
+	id CDATA  #IMPLIED
+	num CDATA  #IMPLIED
+>
+<!ATTLIST figure
+	id CDATA  #IMPLIED
+	num CDATA  #IMPLIED
+	figure-labels CDATA  #IMPLIED
+>
+<!ATTLIST img
+	align CDATA  #IMPLIED
+	id CDATA #IMPLIED
+	height CDATA  #IMPLIED
+	width CDATA  #IMPLIED
+	file CDATA  #IMPLIED
+	alt CDATA  #IMPLIED
+	img-content CDATA  #IMPLIED
+	img-format CDATA  #IMPLIED
+	orientation CDATA  #IMPLIED
+	inline CDATA  #IMPLIED
+	giffile CDATA  #IMPLIED
+>
+<!ATTLIST invention-title
+	id CDATA #IMPLIED
+>
+<!ATTLIST inventor
+	sequence CDATA  #IMPLIED
+  app-type CDATA  #IMPLIED
+  id CDATA #IMPLIED
+>
+<!ATTLIST p
+	type CDATA #IMPLIED
+	align CDATA #IMPLIED
+    id CDATA  #IMPLIED
+    dir CDATA  #IMPLIED
+   style CDATA  #IMPLIED
+   isabst CDATA #IMPLIED
+   isneedindent CDATA #IMPLIED
+>
+<!ATTLIST tw-bibliographic-data-grant
+	country CDATA  #IMPLIED
+	id CDATA  #IMPLIED
+>
+<!ATTLIST tw-patent-grant
+	file CDATA  #IMPLIED
+	lang CDATA  #IMPLIED
+	id CDATA  #IMPLIED
+	dtd-version CDATA  #IMPLIED
+>
+<!ATTLIST chinese-name
+	name-type CDATA  #IMPLIED
+	id CDATA #IMPLIED
+>
+<!ATTLIST english-name
+	name-type CDATA  #IMPLIED
+	id CDATA #IMPLIED
+>
+<!ATTLIST priority-claim
+	sequence CDATA  #IMPLIED
+	id CDATA #IMPLIED
+>
+<!ATTLIST main-classification
+	edition CDATA  #IMPLIED
+  classification-value CDATA #IMPLIED
+>
+<!ATTLIST further-classification
+	edition CDATA  #IMPLIED
+  classification-value CDATA #IMPLIED
+>
+<!ATTLIST drawing-description
+	id CDATA #IMPLIED
+>
