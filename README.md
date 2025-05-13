@@ -14,7 +14,8 @@ This project provides tools to automate the download of patent data from the Tai
 - Python 3.7+
 - Google Chrome browser
 - ChromeDriver (compatible with your Chrome version, placed in the project directory)
-- [lftp](https://lftp.yar.ru/) (for FTPS downloads)
+- [lftp](https://lftp.yar.ru/) (for FTPS downloads) 
+***restart terminal after downloading**
 - The following Python packages:
   - selenium
   - beautifulsoup4
