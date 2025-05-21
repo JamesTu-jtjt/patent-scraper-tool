@@ -8,12 +8,13 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
+import xml.etree.ElementTree as ET
 
 
-def get_ftps_links(selected_year, download_root):
+def get_ftps_links(selected_year):
     # === Configuration ===
-    url = "https://cloud.tipo.gov.tw/S220/opdata/detail/PatentIsuRegSpecXMLA"
-    os.makedirs(download_root, exist_ok=True)
+    urls = ["https://cloud.tipo.gov.tw/S220/opdata/detail/PatentIsuRegSpecXMLA",
+            "https://cloud.tipo.gov.tw/S220/opdata/detail/PatentPubXML"]
 
     # === Setup Selenium ===
     print("[INFO] Launching browser...")
@@ -23,58 +24,115 @@ def get_ftps_links(selected_year, download_root):
     options.add_argument("--no-sandbox")
     options.add_argument("--window-size=1920,1080")
     driver = webdriver.Chrome(options=options)
+    ftps_links = {}
+    for url in urls:
+        print(f"[INFO] Opening {url}")
+        driver.get(url)
+        time.sleep(3)
+        # Find the dropdown element (usually a <select> tag)
+        dropdown_element = driver.find_element(By.XPATH, '//*[@id="root"]//select')  # or use another locator
+        # Create a Select object
+        select = Select(dropdown_element)
+        select.select_by_value(selected_year)
+        print(f"[INFO] Selected year: {selected_year}")
+        time.sleep(3)
+        html = driver.page_source
 
-    print(f"[INFO] Opening {url}")
-    driver.get(url)
-    time.sleep(3)
-    # Find the dropdown element (usually a <select> tag)
-    dropdown_element = driver.find_element(By.XPATH, '//*[@id="root"]//select')  # or use another locator
-    # Create a Select object
-    select = Select(dropdown_element)
-    select.select_by_value(selected_year)
-    print(f"[INFO] Selected year: {selected_year}")
-    time.sleep(3)
-    html = driver.page_source
+        # === Parse HTML ===
+        soup = BeautifulSoup(html, "html.parser")
+        links = [a['href'] for a in soup.find_all('a', href=True) if a['href'].startswith("ftps://")]
+        for l in links: 
+            ref = l.split('/')[-1].split('_')[-1]
+            if ref in ftps_links:
+                ftps_links[ref].append(l)
+            else: 
+                ftps_links[ref] = [l]
+        print(f"[INFO] Found {len(links)} FTPS links")
     driver.quit()
-
-    # === Parse HTML ===
-    soup = BeautifulSoup(html, "html.parser")
-    ftps_links = [a['href'] for a in soup.find_all('a', href=True) if a['href'].startswith("ftps://")]
-    print(f"[INFO] Found {len(ftps_links)} FTPS links")
-
     return ftps_links
 
-
-# === lftp mirror for folder-preserving downloads ===
-def mirror_with_lftp(ftps_url, download_root):
-    parsed = urlparse(ftps_url)
+def download_index_xml(ftps_url, temp_dir):
+    parsed = urlparse(ftps_url[0])
     host = parsed.hostname
     remote_path = parsed.path
-
-    # We'll mirror into local path: downloads/selected_year
-    local_mirror_path = os.path.join(download_root, remote_path.split('/')[-1])
-    os.makedirs(local_mirror_path, exist_ok=True)
-
-    print(f"[INFO] Mirroring: {remote_path}")
+    remote_index_path = os.path.join(remote_path, "index.xml")
+    os.makedirs(temp_dir, exist_ok=True)
     cmd = [
         "lftp", "-e",
-        f"set ssl:check-hostname no; open ftps://{host}; mirror --use-pget-n=4 --verbose {remote_path} .; bye"
+        f"set ssl:check-hostname no; open ftps://{host}; get {remote_index_path}; bye"
     ]
-
     try:
-        result = subprocess.run(
-            cmd,
-            cwd=local_mirror_path,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        print(f"[SUCCESS] Mirrored: {remote_path}")
-        return (remote_path, "Success", result.stdout.strip())
+        result = subprocess.run(cmd, cwd=temp_dir, capture_output=True, text=True, check=True)
+        print(f"[SUCCESS] Downloaded index.xml from {remote_path}")
+        return os.path.join(temp_dir, "index.xml")
     except subprocess.CalledProcessError as e:
-        print(f"[ERROR] Failed to mirror: {remote_path}")
-        print(f"[ERROR] stderr:\n{e.stderr}")
-        return (remote_path, "Failed", e.stderr.strip())
+        print(f"[ERROR] Failed to download index.xml from {remote_path}")
+        print(e.stderr)
+        return None
+
+def get_design_doc_numbers(index_path):
+    try:
+        tree = ET.parse(index_path)
+        root = tree.getroot()
+        design_docs = []
+        for grant in root.findall(".//tw-patent-grant"):
+            volno = grant.findtext(".//volno")
+            isuno = grant.findtext(".//isuno")
+            publ = grant.find(".//publication-reference")
+            appl = grant.find(".//application-reference")
+            if appl is not None and appl.attrib.get("appl-type") == "design":
+                doc_number = appl.findtext("document-id/doc-number")
+                pub_ref = publ.findtext("document-id/doc-number")
+                if doc_number and pub_ref:
+                    xml_name = volno + isuno + pub_ref
+                    design_docs.append([doc_number, xml_name])
+        print(f"[INFO] Found {len(design_docs)} design applications.")
+        return design_docs
+    except Exception as e:
+        print(f"[ERROR] Parsing failed for {index_path}: {e}")
+        return []
+
+def download_design_docs(ftps_url, doc_numbers, download_root):
+    # Get PatentIsuRegSpec
+    parsed = urlparse(ftps_url[0])
+    host = parsed.hostname
+    remote_path = parsed.path
+    os.makedirs(download_root, exist_ok=True)
+    for doc_no in doc_numbers[:3]:
+        print(f"[INFO] Downloading files for doc-number: {doc_no[0]}")
+        cur_path = os.path.join(download_root, doc_no[1])
+        cur_path = os.path.join(cur_path, "PatentIsuRegSpecXMLA")
+        os.makedirs(cur_path, exist_ok=True)
+        # Download XML
+        xml_cmd = [
+            "lftp", "-e",
+            f"set ssl:check-hostname no; open ftps://{host}; get {remote_path}/{doc_no[0]}.xml; bye"
+        ]
+        try:
+            subprocess.run(xml_cmd, cwd=cur_path, capture_output=True, text=True, check=True)
+            print(f"[SUCCESS] Downloaded {doc_no[0]}.xml")
+        except subprocess.CalledProcessError as e:
+            print(f"[ERROR] Failed to download {doc_no[0]}.xml: {e.stderr.strip()}")
+
+    # Get PatentPubXML
+    parsed = urlparse(ftps_url[1])
+    host = parsed.hostname
+    remote_path = parsed.path
+    os.makedirs(download_root, exist_ok=True)
+    for doc_no in doc_numbers[:3]:
+        print(f"[INFO] Downloading files for doc-number: {doc_no[1]}")
+        cur_path = os.path.join(download_root, doc_no[1])
+        cur_path = os.path.join(cur_path, "PatentPubXML")
+        # Download folder
+        folder_cmd = [
+            "lftp", "-e",
+            f"set ssl:check-hostname no; open ftps://{host}; mirror --use-pget-n=4 {remote_path}/{doc_no[1]} {doc_no[1]}; bye"
+        ]
+        try:
+            subprocess.run(folder_cmd, cwd=download_root, capture_output=True, text=True, check=True)
+            print(f"[SUCCESS] Mirrored folder: {doc_no[1]}")
+        except subprocess.CalledProcessError as e:
+            print(f"[ERROR] Failed to mirror folder {doc_no[1]}: {e.stderr.strip()}")
 
 
 if __name__ == "__main__":
@@ -83,19 +141,17 @@ if __name__ == "__main__":
     parser.add_argument("--year", type=str, default='114', required=True, help="Year to select on the TIPO site (e.g. 114)")
     args = parser.parse_args()
     selected_year = args.year
-    download_root = selected_year
-    ftps_links = get_ftps_links(selected_year, download_root)
-    # === Loop through all links and mirror each ===
-    download_logs = []
-    for link in ftps_links:
-        log = mirror_with_lftp(link, download_root)
-        download_logs.append(log)
-        continue
+    ftps_links = get_ftps_links(selected_year)
+    for ref in ftps_links:
+        if len(ftps_links[ref]) < 2: 
+            continue
+        download_root = args.year # os.path.basename(urlparse(link).path.rstrip("/"))
+        download_root = os.path.join(download_root, ftps_links[ref][0].split('/')[-1].split('_')[-1])
+        index_path = download_index_xml(ftps_links[ref], download_root)
+        if not index_path:
+            continue
+        doc_numbers = get_design_doc_numbers(index_path)
+        if doc_numbers:
+            download_design_docs(ftps_links[ref], doc_numbers, download_root)
 
-    # === Write logs ===
-    log_file = os.path.join(download_root, "download_log.txt")
-    with open(log_file, "w", encoding="utf-8") as f:
-        for remote_path, status, message in download_logs:
-            f.write(f"{remote_path}\t{status}\n{message}\n\n")
-
-    print(f"[INFO] Download complete. Logs saved to {log_file}")
+    print(f"[INFO] Download complete.")
