@@ -1,55 +1,31 @@
 import argparse
 import os
-import time
 import subprocess
+import json
+import shutil
 from urllib.parse import urlparse
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.by import By
 import xml.etree.ElementTree as ET
+from ftps_link_scraper import get_ftps_links
 
+def load_ftps_links(year):
+    path = f"ftps_links_{year}.json"
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    else:
+        print(f"FTPS links file not found: Generating FTPS links file")
+        get_ftps_links(year)
+        return get_ftps_links(year)
+    
+def load_success_log(path):
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            return set(json.load(f))
+    return set()
 
-def get_ftps_links(selected_year):
-    # === Configuration ===
-    urls = ["https://cloud.tipo.gov.tw/S220/opdata/detail/PatentIsuRegSpecXMLA",
-            "https://cloud.tipo.gov.tw/S220/opdata/detail/PatentPubXML"]
-
-    # === Setup Selenium ===
-    print("[INFO] Launching browser...")
-    options = Options()
-    options.add_argument("--headless")  # Runs browser in background
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--window-size=1920,1080")
-    driver = webdriver.Chrome(options=options)
-    ftps_links = {}
-    for url in urls:
-        print(f"[INFO] Opening {url}")
-        driver.get(url)
-        time.sleep(3)
-        # Find the dropdown element (usually a <select> tag)
-        dropdown_element = driver.find_element(By.XPATH, '//*[@id="root"]//select')  # or use another locator
-        # Create a Select object
-        select = Select(dropdown_element)
-        select.select_by_value(selected_year)
-        print(f"[INFO] Selected year: {selected_year}")
-        time.sleep(3)
-        html = driver.page_source
-
-        # === Parse HTML ===
-        soup = BeautifulSoup(html, "html.parser")
-        links = [a['href'] for a in soup.find_all('a', href=True) if a['href'].startswith("ftps://")]
-        for l in links: 
-            ref = l.split('/')[-1].split('_')[-1]
-            if ref in ftps_links:
-                ftps_links[ref].append(l)
-            else: 
-                ftps_links[ref] = [l]
-        print(f"[INFO] Found {len(links)} FTPS links")
-    driver.quit()
-    return ftps_links
+def save_success_log(path, success_set):
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(list(success_set), f, ensure_ascii=False, indent=2)
 
 def download_index_xml(ftps_url, temp_dir):
     parsed = urlparse(ftps_url[0])
@@ -57,12 +33,14 @@ def download_index_xml(ftps_url, temp_dir):
     remote_path = parsed.path
     remote_index_path = os.path.join(remote_path, "index.xml")
     os.makedirs(temp_dir, exist_ok=True)
+    if os.path.exists(os.path.join(temp_dir, "index.xml")):
+        return os.path.join(temp_dir, "index.xml")
     cmd = [
         "lftp", "-e",
         f"set ssl:check-hostname no; open ftps://{host}; get {remote_index_path}; bye"
     ]
     try:
-        result = subprocess.run(cmd, cwd=temp_dir, capture_output=True, text=True, check=True)
+        subprocess.run(cmd, cwd=temp_dir, capture_output=True, text=True, check=True)
         print(f"[SUCCESS] Downloaded index.xml from {remote_path}")
         return os.path.join(temp_dir, "index.xml")
     except subprocess.CalledProcessError as e:
@@ -84,7 +62,7 @@ def get_design_doc_numbers(index_path):
                 doc_number = appl.findtext("document-id/doc-number")
                 pub_ref = publ.findtext("document-id/doc-number")
                 if doc_number and pub_ref:
-                    if len(isuno) == 1: 
+                    if len(isuno) == 1:
                         isuno = '0' + isuno
                     xml_name = volno + isuno + pub_ref
                     design_docs.append([doc_number, xml_name])
@@ -95,60 +73,85 @@ def get_design_doc_numbers(index_path):
         return []
 
 def download_design_docs(ftps_url, doc_numbers, download_root):
-    # Get PatentIsuRegSpec
     spec_parsed = urlparse(ftps_url[0])
     spec_host = spec_parsed.hostname
     spec_remote_path = spec_parsed.path
     parsed = urlparse(ftps_url[1])
     host = parsed.hostname
     remote_path = parsed.path
+
     os.makedirs(download_root, exist_ok=True)
-    for doc_no in doc_numbers:
-        print(f"[INFO] Downloading files for doc-number: {doc_no[0]}")
-        cur_path = os.path.join(download_root, doc_no[1])
-        cur_path = os.path.join(cur_path, "PatentIsuRegSpecXMLA")
+    summary_log = []
+    success_log_path = os.path.join(download_root, "success_log.json")
+    success_set = load_success_log(success_log_path)
+
+    for doc_id, xml_name in doc_numbers:
+        print(f"[INFO] Downloading files for doc-number: {doc_id}")
+        cur_path = os.path.join(download_root, xml_name, "PatentIsuRegSpecXMLA")
         os.makedirs(cur_path, exist_ok=True)
-        # Download XML
-        xml_cmd = [
-            "lftp", "-e",
-            f"set ssl:check-hostname no; open ftps://{spec_host}; get {spec_remote_path}/{doc_no[0]}.xml; bye"
-        ]
-        try:
-            subprocess.run(xml_cmd, cwd=cur_path, capture_output=True, text=True, check=True)
-            print(f"[SUCCESS] Downloaded {doc_no[0]}.xml")
-        except subprocess.CalledProcessError as e:
-            print(f"[ERROR] Failed to download {doc_no[0]}.xml: {e.stderr.strip()}")
+        if doc_id in success_set:
+            print(f"[SKIP] Already completed: {doc_id}")
+            continue
+        else:
+            for filename in os.listdir(cur_path):
+                file_path = os.path.join(cur_path, filename)
+                try:
+                    if os.path.isfile(file_path) or os.path.islink(file_path):
+                        os.unlink(file_path)
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                except Exception as e:
+                    print('Failed to delete %s. Reason: %s' % (file_path, e))
+            xml_status = "Success"
+            xml_cmd = [
+                "lftp", "-e",
+                f"set ssl:check-hostname no; open ftps://{spec_host}; get {spec_remote_path}/{doc_id}.xml; bye"
+            ]
+            try:
+                subprocess.run(xml_cmd, cwd=cur_path, capture_output=True, text=True, check=True)
+                print(f"[SUCCESS] Downloaded {doc_id}.xml")
+            except subprocess.CalledProcessError as e:
+                print(f"[ERROR] Failed to download {doc_id}.xml: {e.stderr.strip()}")
+                xml_status = "Failed"
+            
+            folder_status = "Success"
+            folder_cmd = [
+                "lftp", "-e",
+                f"set ssl:check-hostname no; open ftps://{host}; mirror --use-pget-n=4 {remote_path}/{xml_name} {xml_name}; bye"
+            ]
+            try:
+                subprocess.run(folder_cmd, cwd=download_root, capture_output=True, text=True, check=True)
+                print(f"[SUCCESS] Mirrored folder: {xml_name}")
+            except subprocess.CalledProcessError as e:
+                print(f"[ERROR] Failed to mirror folder {xml_name}: {e.stderr.strip()}")
+                folder_status = "Failed"
+            if xml_status != "Failed" and folder_status != "Failed":
+                success_set.add(doc_id)
+                save_success_log(success_log_path, success_set)
+        summary_log.append((doc_id, xml_name, xml_status, folder_status))
 
-        print(f"[INFO] Downloading files for doc-number: {doc_no[1]}")
-        # Download folder
-        folder_cmd = [
-            "lftp", "-e",
-            f"set ssl:check-hostname no; open ftps://{host}; mirror --use-pget-n=4 {remote_path}/{doc_no[1]} {doc_no[1]}; bye"
-        ]
-        try:
-            subprocess.run(folder_cmd, cwd=download_root, capture_output=True, text=True, check=True)
-            print(f"[SUCCESS] Mirrored folder: {doc_no[1]}")
-        except subprocess.CalledProcessError as e:
-            print(f"[ERROR] Failed to mirror folder {doc_no[1]}: {e.stderr.strip()}")
-
+    log_path = os.path.join(download_root, "summary_log.csv")
+    with open(log_path, "w", encoding="utf-8") as f:
+        f.write("doc_number,xml_file,xml_status,folder_status\n")
+        for entry in summary_log:
+            f.write(",".join(entry) + "\n")
+    print(f"[INFO] Summary log written to {log_path}")
 
 if __name__ == "__main__":
-    # === Parse CLI arguments ===
     parser = argparse.ArgumentParser()
-    parser.add_argument("--year", type=str, default='114', required=True, help="Year to select on the TIPO site (e.g. 114)")
+    parser.add_argument("--year", type=str, required=True, help="Year to get patent data. ")
     args = parser.parse_args()
     selected_year = args.year
-    ftps_links = get_ftps_links(selected_year)
+    ftps_links = load_ftps_links(selected_year)
     for ref in ftps_links:
-        if len(ftps_links[ref]) < 2: 
+        if len(ftps_links[ref]) < 2:
             continue
-        download_root = args.year # os.path.basename(urlparse(link).path.rstrip("/"))
-        download_root = os.path.join(download_root, ftps_links[ref][0].split('/')[-1].split('_')[-1])
-        index_path = download_index_xml(ftps_links[ref], download_root)
+        download_root = os.path.join(args.year, ref)
+        temp_dir = os.path.join(download_root, "_temp")
+        index_path = download_index_xml(ftps_links[ref], temp_dir)
         if not index_path:
             continue
         doc_numbers = get_design_doc_numbers(index_path)
         if doc_numbers:
             download_design_docs(ftps_links[ref], doc_numbers, download_root)
-
     print(f"[INFO] Download complete.")

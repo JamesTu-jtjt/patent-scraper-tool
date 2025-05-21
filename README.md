@@ -49,7 +49,8 @@ python scraper.py --year 114
 
 ### 2. Generate Metadata
 
-After downloading, run `generate_metadata.py` to parse XML files and generate CSV metadata.
+After downloading, run `generate_metadata.py` to parse XML files and generate CSV metadata. 
+See https://developing-booth-20a.notion.site/TIPO-1e79755305aa8083acaff0024563ad4e for details on metadata. 
 
 ```bash
 python generate_metadata.py --root example
