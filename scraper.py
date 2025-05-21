@@ -84,6 +84,8 @@ def get_design_doc_numbers(index_path):
                 doc_number = appl.findtext("document-id/doc-number")
                 pub_ref = publ.findtext("document-id/doc-number")
                 if doc_number and pub_ref:
+                    if len(isuno) == 1: 
+                        isuno = '0' + isuno
                     xml_name = volno + isuno + pub_ref
                     design_docs.append([doc_number, xml_name])
         print(f"[INFO] Found {len(design_docs)} design applications.")
@@ -94,7 +96,10 @@ def get_design_doc_numbers(index_path):
 
 def download_design_docs(ftps_url, doc_numbers, download_root):
     # Get PatentIsuRegSpec
-    parsed = urlparse(ftps_url[0])
+    spec_parsed = urlparse(ftps_url[0])
+    spec_host = spec_parsed.hostname
+    spec_remote_path = spec_parsed.path
+    parsed = urlparse(ftps_url[1])
     host = parsed.hostname
     remote_path = parsed.path
     os.makedirs(download_root, exist_ok=True)
@@ -106,7 +111,7 @@ def download_design_docs(ftps_url, doc_numbers, download_root):
         # Download XML
         xml_cmd = [
             "lftp", "-e",
-            f"set ssl:check-hostname no; open ftps://{host}; get {remote_path}/{doc_no[0]}.xml; bye"
+            f"set ssl:check-hostname no; open ftps://{spec_host}; get {spec_remote_path}/{doc_no[0]}.xml; bye"
         ]
         try:
             subprocess.run(xml_cmd, cwd=cur_path, capture_output=True, text=True, check=True)
@@ -114,15 +119,7 @@ def download_design_docs(ftps_url, doc_numbers, download_root):
         except subprocess.CalledProcessError as e:
             print(f"[ERROR] Failed to download {doc_no[0]}.xml: {e.stderr.strip()}")
 
-    # Get PatentPubXML
-    parsed = urlparse(ftps_url[1])
-    host = parsed.hostname
-    remote_path = parsed.path
-    os.makedirs(download_root, exist_ok=True)
-    for doc_no in doc_numbers[:3]:
         print(f"[INFO] Downloading files for doc-number: {doc_no[1]}")
-        cur_path = os.path.join(download_root, doc_no[1])
-        cur_path = os.path.join(cur_path, "PatentPubXML")
         # Download folder
         folder_cmd = [
             "lftp", "-e",
