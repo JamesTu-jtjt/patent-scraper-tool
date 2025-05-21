@@ -103,7 +103,7 @@ def download_design_docs(ftps_url, doc_numbers, download_root):
     host = parsed.hostname
     remote_path = parsed.path
     os.makedirs(download_root, exist_ok=True)
-    for doc_no in doc_numbers[:3]:
+    for doc_no in doc_numbers:
         print(f"[INFO] Downloading files for doc-number: {doc_no[0]}")
         cur_path = os.path.join(download_root, doc_no[1])
         cur_path = os.path.join(cur_path, "PatentIsuRegSpecXMLA")
