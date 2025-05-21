@@ -3,43 +3,45 @@ import pandas as pd
 import os
 import argparse
 
-def parse_single_xml(xml_path, image_dir):
-    """Parse a single XML and return a DataFrame with image metadata."""
+def parse_single_patent(folder_path):
+    """Parse a single patent's data and return a DataFrame with image metadata."""
     try:
-        tree = ET.parse(xml_path)
+        spec_path = os.path.join(folder_path, "PatentIsuRegSpecXMLA")
+        spec_xml_file = os.listdir(spec_path)[0]
+        spec_tree = ET.parse(os.path.join(spec_path, spec_xml_file))
+        spec_root = spec_tree.getroot()
+        xml_file = ""
+        for file in os.listdir(folder_path):
+            if file.lower().endswith(".xml"):
+                xml_file = file
+        tree = ET.parse(os.path.join(folder_path, xml_file))
         root = tree.getroot()
+        specifications = root.find("./specification")
+        # application number
+        app_no = spec_root.findtext(".//application-reference/document-id/doc-number")
+        # img_path
+        img_path = os.path.join(folder_path, root.find(".//drawings/figure/img").attrib.get("file"))
+        # rep_flag
+        rep_flag = 'TRUE' if root.find(".//drawings/figure").attrib.get("representative") == "y" else 'FALSE'
+        # title
+        title = spec_root.findtext(".//invention-title/chinese-title")
+        # locs
+        locarno = spec_root.findtext(".//classification-locarno/main-classification")
+        # loc_descriptions
+        loc_descriptions = spec_root.findtext(".//invention-title/english-title")
 
-        app_no = root.findtext(".//application-reference/document-id/doc-number")
-        title = root.findtext(".//invention-title/chinese-title")
-
-        # IPC codes
-        ipc_codes = []
-        main_class = root.findtext(".//classification-ipc/main-classification")
-        if main_class:
-            ipc_codes.append(main_class)
-        further_classes = root.findall(".//classification-ipc/further-classification")
-        for fc in further_classes:
-            ipc_codes.append(fc.text)
-
-        # Placeholder for descriptions (could be added from external file later)
-        loc_descriptions = root.findtext(".//invention-title/english-title")
-
-        # Images from XML
-        images = root.findall(".//drawings/figure/img")
         rows = []
-        for i, img in enumerate(images):
-            rows.append({
-                "app_no": app_no,
-                "img_path": image_dir,
-                "rep_flag": i == 0,
-                "title": title,
-                "locs": ipc_codes,
-                "loc_descriptions": loc_descriptions
-            })
-
+        rows.append({
+            "app_no": app_no,
+            "img_path": img_path,
+            "rep_flag": rep_flag,
+            "title": title,
+            "locs": locarno,
+            "loc_descriptions": loc_descriptions
+        })
         return pd.DataFrame(rows)
     except Exception as e:
-        print(f"[ERROR] Failed to parse {xml_path}: {e}")
+        print(f"[ERROR] Failed to parse {folder_path}: {e}")
         return pd.DataFrame()
 
 def process_all_folders(parent_folder):
@@ -48,24 +50,15 @@ def process_all_folders(parent_folder):
         dataset_path = os.path.join(parent_folder, dataset_name)
         if not os.path.isdir(dataset_path):
             continue
-
         print(f"[INFO] Processing dataset: {dataset_name}")
         all_rows = []
-        for xml_file in os.listdir(dataset_path):
-            if not xml_file.lower().endswith(".xml"):
+        for folder in os.listdir(dataset_path):
+            folder_path = os.path.join(dataset_path, folder)
+            if os.path.isfile(folder_path):
                 continue
-
-            xml_path = os.path.join(dataset_path, xml_file)
-            image_folder_name = os.path.splitext(xml_file)[0]
-            image_folder_path = os.path.join(dataset_path, image_folder_name)
-            if not os.path.isdir(image_folder_path):
-                print(f"[WARN] No matching image folder for {xml_file}")
-                continue
-
-            df = parse_single_xml(xml_path, image_folder_path)
+            df = parse_single_patent(folder_path)
             if not df.empty:
                 all_rows.append(df)
-
         if all_rows:
             final_df = pd.concat(all_rows, ignore_index=True)
             csv_path = os.path.join(parent_folder, dataset_name + "_metadata.csv")
