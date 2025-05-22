@@ -40,3 +40,13 @@ build/
 
 # Installer logs
 pip-log.txt
+
+# Generated Json/CSV Files
+*.json
+*.CSV
+
+# Downloaded files
+*.xml
+*.png
+*.jpg
+*.tif
