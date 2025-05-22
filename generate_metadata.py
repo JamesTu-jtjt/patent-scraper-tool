@@ -19,10 +19,22 @@ def parse_single_patent(folder_path):
         specifications = root.find("./specification")
         # application number
         app_no = spec_root.findtext(".//application-reference/document-id/doc-number")
-        # img_path
-        img_path = os.path.join(folder_path, root.find(".//drawings/figure/img").attrib.get("file"))
-        # rep_flag
-        rep_flag = 'TRUE' if root.find(".//drawings/figure").attrib.get("representative") == "y" else 'FALSE'
+        # img_path & rep_flag
+        img_paths = []
+        rep_flags = []
+        rep = False
+        images = root.findall(".//drawings/figure/img")
+        for i, img in enumerate(images):
+            img_path = os.path.join(folder_path, img.attrib.get("file"))
+            rep_flag = "FALSE"
+            if root.findall(".//drawings/figure")[i].attrib.get("representative") == "y":
+                print("Found REPRESENTATIVE")
+                rep_flag = "TRUE"
+                rep = True
+            img_paths.append(img_path)
+            rep_flags.append(rep_flag)
+        if not rep:
+            rep_flags[0] = "TRUE"
         # title
         title = spec_root.findtext(".//invention-title/chinese-title")
         # locs
@@ -31,14 +43,16 @@ def parse_single_patent(folder_path):
         loc_descriptions = spec_root.findtext(".//invention-title/english-title")
 
         rows = []
-        rows.append({
-            "app_no": app_no,
-            "img_path": img_path,
-            "rep_flag": rep_flag,
-            "title": title,
-            "locs": locarno,
-            "loc_descriptions": loc_descriptions
-        })
+
+        for i, img in enumerate(images):
+            rows.append({
+                "app_no": app_no,
+                "img_path": img_paths[i],
+                "rep_flag": rep_flags[i],
+                "title": title,
+                "locs": locarno,
+                "loc_descriptions": loc_descriptions
+            })
         return pd.DataFrame(rows)
     except Exception as e:
         print(f"[ERROR] Failed to parse {folder_path}: {e}")
