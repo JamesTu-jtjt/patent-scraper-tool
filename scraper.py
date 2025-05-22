@@ -86,13 +86,12 @@ def download_design_docs(ftps_url, doc_numbers, download_root):
     success_set = load_success_log(success_log_path)
 
     for doc_id, xml_name in doc_numbers:
-        print(f"[INFO] Downloading files for doc-number: {doc_id}")
-        cur_path = os.path.join(download_root, xml_name, "PatentIsuRegSpecXMLA")
+        cur_path = os.path.join(download_root, xml_name)
         os.makedirs(cur_path, exist_ok=True)
         if doc_id in success_set:
-            print(f"[SKIP] Already completed: {doc_id}")
+            print(f"[SKIP] Already completed: {xml_name}")
             continue
-        else:
+        elif len(os.listdir(cur_path)) > 0:
             for filename in os.listdir(cur_path):
                 file_path = os.path.join(cur_path, filename)
                 try:
@@ -102,32 +101,35 @@ def download_design_docs(ftps_url, doc_numbers, download_root):
                         shutil.rmtree(file_path)
                 except Exception as e:
                     print('Failed to delete %s. Reason: %s' % (file_path, e))
-            xml_status = "Success"
-            xml_cmd = [
-                "lftp", "-e",
-                f"set ssl:check-hostname no; open ftps://{spec_host}; get {spec_remote_path}/{doc_id}.xml; bye"
-            ]
-            try:
-                subprocess.run(xml_cmd, cwd=cur_path, capture_output=True, text=True, check=True)
-                print(f"[SUCCESS] Downloaded {doc_id}.xml")
-            except subprocess.CalledProcessError as e:
-                print(f"[ERROR] Failed to download {doc_id}.xml: {e.stderr.strip()}")
-                xml_status = "Failed"
-            
-            folder_status = "Success"
-            folder_cmd = [
-                "lftp", "-e",
-                f"set ssl:check-hostname no; open ftps://{host}; mirror --use-pget-n=4 {remote_path}/{xml_name} {xml_name}; bye"
-            ]
-            try:
-                subprocess.run(folder_cmd, cwd=download_root, capture_output=True, text=True, check=True)
-                print(f"[SUCCESS] Mirrored folder: {xml_name}")
-            except subprocess.CalledProcessError as e:
-                print(f"[ERROR] Failed to mirror folder {xml_name}: {e.stderr.strip()}")
-                folder_status = "Failed"
-            if xml_status != "Failed" and folder_status != "Failed":
-                success_set.add(doc_id)
-                save_success_log(success_log_path, success_set)
+        print(f"[INFO] Downloading files for doc-number: {xml_name}")
+        cur_path = os.path.join(cur_path, "PatentIsuRegSpecXMLA")
+        os.makedirs(cur_path, exist_ok=True)
+        xml_status = "Success"
+        xml_cmd = [
+            "lftp", "-e",
+            f"set ssl:check-hostname no; open ftps://{spec_host}; get {spec_remote_path}/{doc_id}.xml; bye"
+        ]
+        try:
+            subprocess.run(xml_cmd, cwd=cur_path, capture_output=True, text=True, check=True)
+            print(f"[SUCCESS] Downloaded {doc_id}.xml")
+        except subprocess.CalledProcessError as e:
+            print(f"[ERROR] Failed to download {doc_id}.xml: {e.stderr.strip()}")
+            xml_status = "Failed"
+        
+        folder_status = "Success"
+        folder_cmd = [
+            "lftp", "-e",
+            f"set ssl:check-hostname no; open ftps://{host}; mirror --use-pget-n=4 {remote_path}/{xml_name} {xml_name}; bye"
+        ]
+        try:
+            subprocess.run(folder_cmd, cwd=download_root, capture_output=True, text=True, check=True)
+            print(f"[SUCCESS] Mirrored folder: {xml_name}")
+        except subprocess.CalledProcessError as e:
+            print(f"[ERROR] Failed to mirror folder {xml_name}: {e.stderr.strip()}")
+            folder_status = "Failed"
+        if xml_status != "Failed" and folder_status != "Failed":
+            success_set.add(doc_id)
+            save_success_log(success_log_path, success_set)
         summary_log.append((doc_id, xml_name, xml_status, folder_status))
 
     log_path = os.path.join(download_root, "summary_log.csv")
